@@ -65,5 +65,7 @@ In [managed-cluster-and-vpc](managed-cluster-and-vpc) directory.
 
 ## References
 
+[https://yq.aliyun.com/articles/641627](https://yq.aliyun.com/articles/641627)
+
 [https://github.com/alibabacloud-howto/devops](https://github.com/alibabacloud-howto/devops)
 
