@@ -19,7 +19,7 @@ data "alicloud_zones" "default" {
 resource "alicloud_vpc" "vpc" {
   count      = "${var.vpc_id == "" ? 1 : 0}"
   cidr_block = "${var.vpc_cidr}"
-  name       = "${var.vpc_name == "" ? var.example_name : var.vpc_name}"
+  name       = "${var.vpc_name == "" ? var.cluster_name : var.vpc_name}"
 }
 
 // According to the vswitch cidr blocks to launch several vswitches
@@ -29,13 +29,13 @@ resource "alicloud_vswitch" "vswitches" {
   cidr_block        = "${element(var.vswitch_cidrs, count.index)}"
   # availability_zone = "${lookup(data.alicloud_zones.default.zones[count.index%length(data.alicloud_zones.default.zones)], "id")}"
   availability_zone = "${var.availability_zone}"
-  name              = "${var.vswitch_name_prefix == "" ? format("%s-%s", var.example_name, format(var.number_format, count.index+1)) : format("%s-%s", var.vswitch_name_prefix, format(var.number_format, count.index+1))}"
+  name              = "${var.vswitch_name_prefix == "" ? format("%s-%s", var.cluster_name, format(var.number_format, count.index+1)) : format("%s-%s", var.vswitch_name_prefix, format(var.number_format, count.index+1))}"
 }
 
 resource "alicloud_nat_gateway" "default" {
   count  = "${var.new_nat_gateway == true ? 1 : 0}"
   vpc_id = "${var.vpc_id == "" ? join("", alicloud_vpc.vpc.*.id) : var.vpc_id}"
-  name   = "${var.example_name}"
+  name   = "${var.cluster_name}"
 }
 
 resource "alicloud_eip" "default" {
@@ -58,7 +58,7 @@ resource "alicloud_snat_entry" "default" {
 
 resource "alicloud_cs_kubernetes" "k8s" {
   count                 = "${var.k8s_number}"
-  name                  = "${var.k8s_name_prefix == "" ? format("%s-%s", var.example_name, format(var.number_format, count.index+1)) : format("%s-%s", var.k8s_name_prefix, format(var.number_format, count.index+1))}"
+  name                  = "${var.k8s_name_prefix == "" ? format("%s-%s", var.cluster_name, format(var.number_format, count.index+1)) : format("%s-%s", var.k8s_name_prefix, format(var.number_format, count.index+1))}"
   vswitch_ids           = ["${length(var.vswitch_ids) > 0 ? element(split(",", join(",", var.vswitch_ids)), count.index%length(split(",", join(",", var.vswitch_ids)))) : length(var.vswitch_cidrs) < 1 ? "" : element(split(",", join(",", alicloud_vswitch.vswitches.*.id)), count.index%length(split(",", join(",", alicloud_vswitch.vswitches.*.id))))}"]
   new_nat_gateway       = false
   master_instance_types = ["${var.master_instance_type == "" ? data.alicloud_instance_types.default.instance_types.0.id : var.master_instance_type}"]
@@ -78,7 +78,7 @@ resource "alicloud_cs_kubernetes" "k8s" {
   cluster_network_type  = "${var.cluster_network_type}"
   log_config {
     type = "SLS"
-    project = "${var.k8s_name_prefix == "" ? format("%s-%s", var.example_name, format(var.number_format, count.index+1)) : format("%s-%s", var.k8s_name_prefix, format(var.number_format, count.index+1))}"
+    project = "${var.k8s_name_prefix == "" ? format("%s-%s", var.cluster_name, format(var.number_format, count.index+1)) : format("%s-%s", var.k8s_name_prefix, format(var.number_format, count.index+1))}"
   }
 
   depends_on = ["alicloud_snat_entry.default"]
