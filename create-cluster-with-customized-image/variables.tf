@@ -15,7 +15,7 @@ variable "number_format" {
   default     = "%02d"
 }
 
-variable "example_name" {
+variable "cluster_name" {
   default = "tf-example-kubernetes"
 }
 
@@ -38,7 +38,7 @@ variable "memory_size" {
 
 # VPC variables
 variable "vpc_name" {
-  description = "The vpc name used to create a new vpc when 'vpc_id' is not specified. Default to variable `example_name`"
+  description = "The vpc name used to create a new vpc when 'vpc_id' is not specified. Default to variable `cluster_name`"
   default     = ""
 }
 
@@ -49,12 +49,12 @@ variable "vpc_id" {
 
 variable "vpc_cidr" {
   description = "The cidr block used to launch a new vpc when 'vpc_id' is not specified."
-  default     = "10.1.0.0/21"
+  default     = "192.168.0.0/16"
 }
 
 # VSwitch variables
 variable "vswitch_name_prefix" {
-  description = "The vswitch name prefix used to create several new vswitches. Default to variable `example_name`"
+  description = "The vswitch name prefix used to create several new vswitches. Default to variable `cluster_name`"
   default     = ""
 }
 
@@ -67,7 +67,7 @@ variable "vswitch_ids" {
 variable "vswitch_cidrs" {
   description = "List of cidr blocks used to create several new vswitches when 'vswitch_ids' is not specified."
   type        = "list"
-  default     = ["10.1.2.0/24"]
+  default     = ["192.168.1.0/24"]
 }
 
 variable "new_nat_gateway" {
@@ -126,7 +126,7 @@ variable "ecs_password" {
 
 variable "ecs_keyname" {
   description = "keypair name of ECS to be created"
-  default = "libintpx"
+  default = ""
 }
 
 
@@ -141,7 +141,7 @@ variable "k8s_worker_number" {
 }
 
 variable "k8s_name_prefix" {
-  description = "The name prefix used to create several kubernetes clusters. Default to variable `example_name`"
+  description = "The name prefix used to create several kubernetes clusters. Default to variable `cluster_name`"
   default     = ""
 }
 

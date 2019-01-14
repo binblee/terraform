@@ -70,7 +70,8 @@ resource "alicloud_cs_kubernetes" "k8s" {
   worker_disk_size      = "${var.master_disk_size}"
   worker_data_disk_category = "${var.worker_data_disk_category}"
   worker_data_disk_size = "${var.worker_data_disk_size}"
-  key_name              = "${var.ecs_keyname}"
+  # key_name              = "${var.ecs_keyname}"
+  password              = "${var.ecs_password}"
   pod_cidr              = "${var.k8s_pod_cidr}"
   service_cidr          = "${var.k8s_service_cidr}"
   enable_ssh            = true

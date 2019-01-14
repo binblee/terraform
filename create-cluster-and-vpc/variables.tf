@@ -126,7 +126,7 @@ variable "ecs_password" {
 
 variable "ecs_keyname" {
   description = "keypair name of ECS to be created"
-  default = "libintpx"
+  default = ""
 }
 
 
